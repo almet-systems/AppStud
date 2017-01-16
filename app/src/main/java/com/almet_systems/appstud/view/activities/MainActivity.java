@@ -1,12 +1,14 @@
 package com.almet_systems.appstud.view.activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -38,6 +40,8 @@ import rx.functions.Action1;
  */
 
 public class MainActivity extends BaseActivity implements MainActivityViewModel.ActionListener {
+
+    private static final int LOCATION_SETTINGS = 45;
 
     ActivityMainBinding binding;
     MapFragment mapFragment;
@@ -130,7 +134,13 @@ public class MainActivity extends BaseActivity implements MainActivityViewModel.
     }
 
     private void openDeviceLocationSettings() {
+        startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), LOCATION_SETTINGS);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        viewModel.getLocation();
     }
 
     @Override

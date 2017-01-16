@@ -13,7 +13,6 @@ import com.almet_systems.appstud.models.Results;
 import com.almet_systems.appstud.view.activities.MainActivity;
 import com.almet_systems.appstud.view.adapter.PlacesAdapter;
 import com.almet_systems.appstud.view.base.BaseFragment;
-import com.almet_systems.appstud.view_model.fragment.CacheViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,6 @@ import java.util.List;
 public class ListFragment extends BaseFragment {
     FragmentListBinding binding;
     PlacesAdapter adapter;
-    CacheViewModel viewModel;
 
     public static ListFragment newInstance() {
         Bundle args = new Bundle();
@@ -38,7 +36,6 @@ public class ListFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentListBinding.inflate(inflater);
-        viewModel = new CacheViewModel(getContext());
         return binding.getRoot();
     }
 
@@ -52,9 +49,6 @@ public class ListFragment extends BaseFragment {
         }
         binding.rv.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rv.setAdapter(adapter);
-        if (viewModel.getData() != null) {
-            viewModel.setData(viewModel.getData());
-        }
         binding.swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

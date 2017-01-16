@@ -20,10 +20,6 @@ public abstract class BaseFragment extends Fragment {
     protected BaseViewModel baseViewModel;
     protected CompositeSubscription subscription = new CompositeSubscription();
 
-    @Nullable
-    @Override
-    public abstract View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
-
     @Override
     public void onDestroy() {
         super.onDestroy();

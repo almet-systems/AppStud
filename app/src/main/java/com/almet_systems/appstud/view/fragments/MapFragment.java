@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.almet_systems.appstud.databinding.FragmentMapBinding;
 import com.almet_systems.appstud.models.Results;
 import com.almet_systems.appstud.view.base.BaseFragment;
-import com.almet_systems.appstud.view_model.fragment.CacheViewModel;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.Marker;
@@ -26,7 +25,6 @@ import java.util.Map;
 
 public class MapFragment extends BaseFragment {
     FragmentMapBinding binding;
-    CacheViewModel viewModel;
     GoogleMap googleMap;
 
     Map<Results, Marker> markers = new HashMap<>();
@@ -42,8 +40,6 @@ public class MapFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMapBinding.inflate(inflater);
-        viewModel = new CacheViewModel(getContext());
-        setBaseViewModel(viewModel);
         return binding.getRoot();
     }
 
@@ -58,8 +54,8 @@ public class MapFragment extends BaseFragment {
                 googleMap.setMyLocationEnabled(true);
                 googleMap.getUiSettings().setMyLocationButtonEnabled(true);
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
-                List<Results> data=getArguments().getParcelableArrayList("data");
-                if (data!= null) {
+                List<Results> data = getArguments().getParcelableArrayList("data");
+                if (data != null) {
                     addMarkers(data);
                 }
             }

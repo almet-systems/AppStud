@@ -1,6 +1,5 @@
 package com.almet_systems.appstud.view.fragments;
 
-import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -10,19 +9,16 @@ import android.view.ViewGroup;
 import com.almet_systems.appstud.databinding.FragmentMapBinding;
 import com.almet_systems.appstud.models.Results;
 import com.almet_systems.appstud.view.base.BaseFragment;
-import com.almet_systems.appstud.view_model.fragment.FragmentMapViewModel;
+import com.almet_systems.appstud.view_model.fragment.CacheViewModel;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.tbruyelle.rxpermissions.RxPermissions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import rx.functions.Action1;
 
 /**
  * Created by razir on 1/16/2017.
@@ -30,7 +26,7 @@ import rx.functions.Action1;
 
 public class MapFragment extends BaseFragment {
     FragmentMapBinding binding;
-    FragmentMapViewModel viewModel;
+    CacheViewModel viewModel;
     GoogleMap googleMap;
 
     Map<Results, Marker> markers = new HashMap<>();
@@ -46,7 +42,7 @@ public class MapFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMapBinding.inflate(inflater);
-        viewModel = new FragmentMapViewModel(getContext());
+        viewModel = new CacheViewModel(getContext());
         setBaseViewModel(viewModel);
         return binding.getRoot();
     }
@@ -62,8 +58,9 @@ public class MapFragment extends BaseFragment {
                 googleMap.setMyLocationEnabled(true);
                 googleMap.getUiSettings().setMyLocationButtonEnabled(true);
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
-                if (viewModel.getData() != null) {
-                    setData(viewModel.getData());
+                List<Results> data=getArguments().getParcelableArrayList("data");
+                if (data!= null) {
+                    addMarkers(data);
                 }
             }
         });
@@ -95,15 +92,16 @@ public class MapFragment extends BaseFragment {
 
     @Override
     public void setData(List<Results> data) {
-        if (googleMap != null) {
-            googleMap.clear();
-            markers.clear();
-            for (Results results : data) {
-                setMarker(results);
-            }
-        } else {
-            viewModel.setData(data);
+        getArguments().putParcelableArrayList("data", new ArrayList<>(data));
+    }
+
+    private void addMarkers(List<Results> data) {
+        googleMap.clear();
+        markers.clear();
+        for (Results results : data) {
+            setMarker(results);
         }
+
     }
 
     @Override

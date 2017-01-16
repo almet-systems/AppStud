@@ -1,5 +1,8 @@
 package com.almet_systems.appstud.view.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.almet_systems.appstud.R;
 import com.almet_systems.appstud.databinding.FragmentMapBinding;
 import com.almet_systems.appstud.models.Results;
 import com.almet_systems.appstud.view.activities.MainActivity;
@@ -15,9 +19,14 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +41,7 @@ public class MapFragment extends BaseFragment {
     FragmentMapBinding binding;
     GoogleMap googleMap;
 
-    Map<Results, Marker> markers = new HashMap<>();
+    List<Target> targets = new ArrayList<>();
 
     public static MapFragment newInstance() {
         Bundle args = new Bundle();
@@ -92,9 +101,8 @@ public class MapFragment extends BaseFragment {
     }
 
 
-    public void setMarker(Results results) {
-        Marker marker = googleMap.addMarker(new MarkerOptions().position(results.getLocation()).draggable(false));
-        markers.put(results, marker);
+    public void setMarker(Results results, Bitmap bitmap) {
+        googleMap.addMarker(new MarkerOptions().position(results.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
     }
 
     @Override
@@ -104,12 +112,56 @@ public class MapFragment extends BaseFragment {
 
     private void addMarkers(List<Results> data) {
         googleMap.clear();
-        markers.clear();
-        for (Results results : data) {
-            setMarker(results);
-        }
+        loadAllMarkersImages(data);
 
     }
+
+    private void updateMarker(Results results, Bitmap bitmap) {
+        setMarker(results, bitmap);
+    }
+
+    private void loadAllMarkersImages(List<Results> data) {
+        for (Results results : data) {
+            if (results.getPhotos() != null && !results.getPhotos().isEmpty()) {
+                CustomTarget target = new CustomTarget(results);
+                targets.add(target);
+                Picasso.with(getContext()).load(results.getPhotos().get(0).getPhotoReferenceSmall())
+                        .centerCrop()
+                        .resizeDimen(R.dimen.marker_size, R.dimen.marker_size)
+                        .transform(circle).into(target);
+            }
+        }
+    }
+
+    class CustomTarget implements Target {
+        Results results;
+
+        public CustomTarget(Results results) {
+            this.results = results;
+        }
+
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            targets.remove(this);
+            updateMarker(results, bitmap);
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+            targets.remove(this);
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+        }
+    }
+
+    Transformation circle = new RoundedTransformationBuilder()
+            .borderColor(Color.BLACK)
+            .borderWidthDp(2)
+            .oval(true)
+            .build();
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

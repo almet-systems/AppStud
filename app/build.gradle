@@ -54,6 +54,7 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-android:4.45'
     compile 'com.google.android.gms:play-services-maps:10.0.1'
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1@aar'
+    compile 'com.makeramen:roundedimageview:2.3.0'
 
 }
 apply plugin: 'com.google.gms.google-services'

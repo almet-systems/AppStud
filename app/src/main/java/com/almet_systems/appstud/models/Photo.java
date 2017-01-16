@@ -23,6 +23,13 @@ public class Photo implements Parcelable {
     }
 
 
+    public String getPhotoReferenceSmall() {
+
+        return String.format("https://maps.googleapis.com/maps/api/place/photo?maxwidth=" +
+                        "%d&photoreference=%s&key=%s",
+                80, photoReference, App.getContext().getResources().getString(R.string.google_places_api_key));
+    }
+
     @Override
     public int describeContents() {
         return 0;

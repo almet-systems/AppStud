@@ -1,5 +1,6 @@
 package com.almet_systems.appstud.view.base;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,7 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.almet_systems.appstud.models.Results;
 import com.almet_systems.appstud.view_model.base.BaseViewModel;
+
+import java.util.List;
 
 import rx.subscriptions.CompositeSubscription;
 
@@ -29,6 +33,8 @@ public abstract class BaseFragment extends Fragment {
         if (subscription != null)
             subscription.unsubscribe();
     }
+
+    public abstract void setData(List<Results> data);
 
     protected void setBaseViewModel(BaseViewModel model) {
         this.baseViewModel = model;

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="side_padding">15dp</dimen>
+    <dimen name="button_error_margin">15dp</dimen>
+    <dimen name="progress_margin">15dp</dimen>
+</resources>

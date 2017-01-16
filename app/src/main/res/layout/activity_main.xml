@@ -2,6 +2,9 @@
 <layout>
 
     <data>
+
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.almet_systems.appstud.view_model.activity.MainActivityViewModel" />
@@ -24,9 +27,58 @@
                 android:background="@color/colorPrimary" />
         </android.support.design.widget.AppBarLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/side_padding"
+            android:paddingRight="@dimen/side_padding"
+            android:visibility="@{viewModel.isErrorState(viewModel.state)?View.VISIBLE:View.GONE}"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@{viewModel.getErrorText(viewModel.state)}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+            <Button
+                android:id="@+id/btnError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/button_error_margin"
+                android:text="@string/main.try_again" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/side_padding"
+            android:paddingRight="@dimen/side_padding"
+            android:visibility="@{viewModel.isLoadingState(viewModel.state)?View.VISIBLE:View.GONE}"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/progress_margin"
+                android:gravity="center"
+                android:text="@{viewModel.getLoadingText(viewModel.state)}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="@{viewModel.isCompletedState(viewModel.state)?View.VISIBLE:View.GONE}"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <FrameLayout

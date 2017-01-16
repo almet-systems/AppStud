@@ -1,5 +1,6 @@
 package com.almet_systems.appstud.models;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -20,6 +21,10 @@ public class Results {
 
     @SerializedName("photos")
     private List<Photo> photos;
+
+    public LatLng getLocation(){
+        return new LatLng(geometry.getLocationPlace().getLat(),geometry.getLocationPlace().getLng());
+    }
 
     public Geometry getGeometry() {
         return geometry;

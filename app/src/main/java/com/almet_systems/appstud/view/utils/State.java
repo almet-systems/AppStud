@@ -7,12 +7,14 @@ package com.almet_systems.appstud.view.utils;
 public class State {
 
 
-    public static final int STATE_LOCATING = 2;
-    public static final int STATE_LOADING = 3;
-    public static final int STATE_DATA_LOADED = 5;
+    public static final int STATE_LOCATING = 10;
+    public static final int STATE_LOADING = 11;
 
-    public static final int STATE_ERROR_NETWORK = 4;
-    public static final int STATE_ERROR_NO_LOCATION = 2;
-    public static final int STATE_ERROR_NO_PROVIDER = 1;
+    public static final int STATE_DATA_LOADED = 30;
+
+    public static final int STATE_ERROR_NETWORK = 3;
+    public static final int STATE_ERROR_NO_LOCATION = 4;
+    public static final int STATE_ERROR_NO_PROVIDER = 5;
+    public static final int STATE_ERROR_PERMISSIONS = 6;
 
 }

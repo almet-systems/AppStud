@@ -8,11 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.almet_systems.appstud.databinding.FragmentMapBinding;
+import com.almet_systems.appstud.models.Results;
 import com.almet_systems.appstud.view.base.BaseFragment;
 import com.almet_systems.appstud.view_model.fragment.FragmentMapViewModel;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.tbruyelle.rxpermissions.RxPermissions;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import rx.functions.Action1;
 
@@ -23,6 +31,9 @@ import rx.functions.Action1;
 public class MapFragment extends BaseFragment {
     FragmentMapBinding binding;
     FragmentMapViewModel viewModel;
+    GoogleMap googleMap;
+
+    Map<Results, Marker> markers = new HashMap<>();
 
     public static MapFragment newInstance() {
         Bundle args = new Bundle();
@@ -47,7 +58,13 @@ public class MapFragment extends BaseFragment {
         binding.mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-
+                MapFragment.this.googleMap = googleMap;
+                googleMap.setMyLocationEnabled(true);
+                googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+                googleMap.getUiSettings().setZoomControlsEnabled(true);
+                if (viewModel.getData() != null) {
+                    setData(viewModel.getData());
+                }
             }
         });
     }
@@ -68,6 +85,25 @@ public class MapFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         binding.mapView.onDestroy();
+    }
+
+
+    public void setMarker(Results results) {
+        Marker marker = googleMap.addMarker(new MarkerOptions().position(results.getLocation()).draggable(false));
+        markers.put(results, marker);
+    }
+
+    @Override
+    public void setData(List<Results> data) {
+        if (googleMap != null) {
+            googleMap.clear();
+            markers.clear();
+            for (Results results : data) {
+                setMarker(results);
+            }
+        } else {
+            viewModel.setData(data);
+        }
     }
 
     @Override

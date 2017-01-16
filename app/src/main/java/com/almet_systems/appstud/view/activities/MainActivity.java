@@ -11,11 +11,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.almet_systems.appstud.R;
 import com.almet_systems.appstud.databinding.ActivityMainBinding;
+import com.almet_systems.appstud.models.Results;
 import com.almet_systems.appstud.view.base.BaseActivity;
+import com.almet_systems.appstud.view.base.BaseFragment;
 import com.almet_systems.appstud.view.fragments.ListFragment;
 import com.almet_systems.appstud.view.fragments.MapFragment;
 import com.almet_systems.appstud.view.utils.FragmentUtils;
@@ -24,6 +28,8 @@ import com.almet_systems.appstud.view.utils.State;
 import com.almet_systems.appstud.view_model.activity.MainActivityViewModel;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
+import java.util.List;
+
 import rx.Subscriber;
 import rx.functions.Action1;
 
@@ -31,7 +37,7 @@ import rx.functions.Action1;
  * Created by razir on 1/16/2017.
  */
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements MainActivityViewModel.ActionListener {
 
     ActivityMainBinding binding;
     MapFragment mapFragment;
@@ -43,28 +49,35 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        setContentView(binding.getRoot());
-        setSupportActionBar(binding.toolbar);
         mapFragment = MapFragment.newInstance();
         listFragment = ListFragment.newInstance();
-        viewModel = new MainActivityViewModel(this);
+        viewModel = new MainActivityViewModel(this, this);
         setBaseViewModel(viewModel);
         binding.setViewModel(viewModel);
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
         binding.bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.actionMap:
+                        mapFragment.setData(viewModel.getResults());
                         FragmentUtils.changeFragment(MainActivity.this, R.id.contentFrame, mapFragment, false);
                         return true;
                     case R.id.actionList:
+                        listFragment.setData(viewModel.getResults());
                         FragmentUtils.changeFragment(MainActivity.this, R.id.contentFrame, listFragment, false);
                         return true;
                 }
                 return false;
             }
         });
-        FragmentUtils.changeFragment(MainActivity.this, R.id.contentFrame, mapFragment, false);
+        binding.btnError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resolveError();
+            }
+        });
         refreshData();
     }
 
@@ -89,10 +102,42 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onNext(Boolean aBoolean) {
                         if (aBoolean) {
+                            FragmentUtils.changeFragment(MainActivity.this, R.id.contentFrame, mapFragment, false);
                             viewModel.getLocation();
+                        } else {
+                            viewModel.setState(State.STATE_ERROR_PERMISSIONS);
                         }
                     }
                 });
     }
 
+    private void resolveError() {
+        int state = viewModel.getCurrentState();
+        switch (state) {
+            case State.STATE_ERROR_PERMISSIONS:
+                checkPermission();
+                break;
+            case State.STATE_ERROR_NO_PROVIDER:
+                openDeviceLocationSettings();
+                break;
+            case State.STATE_ERROR_NETWORK:
+                viewModel.loadLastLocation();
+                break;
+            case State.STATE_ERROR_NO_LOCATION:
+                viewModel.getLocation();
+                break;
+        }
+    }
+
+    private void openDeviceLocationSettings() {
+
+    }
+
+    @Override
+    public void onDataRefreshed(List<Results> results) {
+        BaseFragment fragment = (BaseFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+        if (fragment != null) {
+            fragment.setData(results);
+        }
+    }
 }

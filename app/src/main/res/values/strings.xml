@@ -2,4 +2,13 @@
     <string name="app_name">AppStud</string>
     <string name="menu_map">Map</string>
     <string name="menu_list">List</string>
+    <string name="main.try_again">Try again</string>
+    <string name="error_check_network">Check network connection</string>
+    <string name="error_location">Can\'t find your location.</string>
+    <string name="error_cant_locate">Please enable gps or network on phone settings</string>
+    <string name="error_permissions">Please grant required permissions first</string>
+    <string name="undefined_error">Undefined error</string>
+    <string name="loading_data">Loading data. Please wait</string>
+    <string name="locating">Locating...</string>
+    <string name="please_wait">Please wait</string>
 </resources>

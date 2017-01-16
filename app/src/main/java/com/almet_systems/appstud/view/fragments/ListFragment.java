@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.almet_systems.appstud.models.Results;
 import com.almet_systems.appstud.view.base.BaseFragment;
+
+import java.util.List;
 
 /**
  * Created by razir on 1/16/2017.
@@ -25,5 +28,10 @@ public class ListFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void setData(List<Results> data) {
+
     }
 }

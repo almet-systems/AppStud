@@ -105,6 +105,10 @@ public class MainActivityViewModel extends BaseViewModel {
         loadData(lastLocation);
     }
 
+    public Location getLastLocation() {
+        return lastLocation;
+    }
+
     public void loadData(Location location) {
         lastLocation = location;
         Subscriber<PlaceResponse> subscriber = new Subscriber<PlaceResponse>() {

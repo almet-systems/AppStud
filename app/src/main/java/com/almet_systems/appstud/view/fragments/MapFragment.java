@@ -1,5 +1,6 @@
 package com.almet_systems.appstud.view.fragments;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -8,9 +9,13 @@ import android.view.ViewGroup;
 
 import com.almet_systems.appstud.databinding.FragmentMapBinding;
 import com.almet_systems.appstud.models.Results;
+import com.almet_systems.appstud.view.activities.MainActivity;
 import com.almet_systems.appstud.view.base.BaseFragment;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -57,9 +62,15 @@ public class MapFragment extends BaseFragment {
                 List<Results> data = getArguments().getParcelableArrayList("data");
                 if (data != null) {
                     addMarkers(data);
+                    MainActivity activity = (MainActivity) getActivity();
+                    zoomToLocation(activity.getLastLocation());
                 }
             }
         });
+    }
+
+    private void zoomToLocation(Location location) {
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 12));
     }
 
     @Override

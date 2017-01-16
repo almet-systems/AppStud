@@ -137,6 +137,10 @@ public class MainActivity extends BaseActivity implements MainActivityViewModel.
         startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), LOCATION_SETTINGS);
     }
 
+    public Location getLastLocation() {
+        return viewModel.getLastLocation();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

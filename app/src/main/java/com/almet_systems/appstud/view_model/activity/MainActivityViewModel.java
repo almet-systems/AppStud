@@ -35,7 +35,7 @@ import static android.content.Context.LOCATION_SERVICE;
  */
 
 public class MainActivityViewModel extends BaseViewModel {
-    static final int SEARCH_RADIUS_METERS = 50000;
+    static final int SEARCH_RADIUS_METERS = 2000;
     private static final String RANK_BY = "distance";
     private static final int LOCATION_TIMEOUT = 15000;
     Timer timer;
@@ -57,7 +57,7 @@ public class MainActivityViewModel extends BaseViewModel {
         this.listener = new WeakReference<>(listener);
     }
 
-    public int getCurrentState(){
+    public int getCurrentState() {
         return state.get();
     }
 
@@ -101,7 +101,7 @@ public class MainActivityViewModel extends BaseViewModel {
         return getContext().getString(R.string.undefined_error);
     }
 
-    public void loadLastLocation(){
+    public void loadLastLocation() {
         loadData(lastLocation);
     }
 
@@ -126,7 +126,7 @@ public class MainActivityViewModel extends BaseViewModel {
             public void onNext(PlaceResponse response) {
                 state.set(State.STATE_DATA_LOADED);
                 results = response.getResults();
-                if(listener.get()!=null){
+                if (listener.get() != null) {
                     listener.get().onDataRefreshed(results);
                 }
             }
@@ -147,8 +147,6 @@ public class MainActivityViewModel extends BaseViewModel {
         } else {
             setState(State.STATE_ERROR_NETWORK);
         }
-
-
     }
 
     public void setState(int state) {
@@ -161,14 +159,14 @@ public class MainActivityViewModel extends BaseViewModel {
                 && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            state.set(State.STATE_LOCATING);
-            setupTimeout();
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 0, locationListener);
-        } else if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+        if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             setupTimeout();
             state.set(State.STATE_LOCATING);
             lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 0, locationListener);
+        } else if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            state.set(State.STATE_LOCATING);
+            setupTimeout();
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 0, locationListener);
         } else {
             setState(State.STATE_ERROR_NO_PROVIDER);
         }

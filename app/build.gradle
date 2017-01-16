@@ -15,9 +15,22 @@ android {
         enabled = true
     }
 
+    signingConfigs {
+        release {
+            storeFile file("key.jks")
+            storePassword "123456789"
+            keyAlias "AppStud"
+            keyPassword "123456789"
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig signingConfigs.release
+        }
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

@@ -60,6 +60,7 @@ public class MapFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle(R.string.menu_map);
         binding.mapView.onCreate(savedInstanceState);
         binding.mapView.getMapAsync(new OnMapReadyCallback() {
             @Override

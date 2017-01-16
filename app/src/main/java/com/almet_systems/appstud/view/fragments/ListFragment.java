@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.almet_systems.appstud.R;
 import com.almet_systems.appstud.databinding.FragmentListBinding;
 import com.almet_systems.appstud.models.Results;
 import com.almet_systems.appstud.view.activities.MainActivity;
@@ -42,6 +43,7 @@ public class ListFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle(R.string.menu_list);
         List<Results> data = getArguments().getParcelableArrayList("data");
         adapter = new PlacesAdapter(getContext());
         if (data != null) {

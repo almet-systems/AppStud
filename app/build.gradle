@@ -52,4 +52,8 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     compile 'com.j256.ormlite:ormlite-android:4.45'
+    compile 'com.google.android.gms:play-services-maps:10.0.1'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1@aar'
+
 }
+apply plugin: 'com.google.gms.google-services'

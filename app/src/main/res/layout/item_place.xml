@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.almet_systems.appstud.view_model.item.ItemPlaceViewModel" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_place_height"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:imageUrlCrop="@{viewModel.image}" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPlaceTitleBackground"
+            android:paddingBottom="@dimen/item_place_title_padding"
+            android:paddingLeft="@dimen/side_padding"
+            android:paddingRight="@dimen/side_padding"
+            android:paddingTop="@dimen/item_place_title_padding"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:text="@{viewModel.title}"
+            android:textColor="@color/colorPlaceTitle" />
+    </RelativeLayout>
+
+</layout>

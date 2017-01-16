@@ -43,7 +43,7 @@ public class MainActivity extends BaseActivity implements MainActivityViewModel.
     MapFragment mapFragment;
     ListFragment listFragment;
     MainActivityViewModel viewModel;
-
+    int currentTab;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +59,7 @@ public class MainActivity extends BaseActivity implements MainActivityViewModel.
         binding.bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                currentTab = item.getItemId();
                 switch (item.getItemId()) {
                     case R.id.actionMap:
                         mapFragment.setData(viewModel.getResults());
@@ -102,7 +103,6 @@ public class MainActivity extends BaseActivity implements MainActivityViewModel.
                     @Override
                     public void onNext(Boolean aBoolean) {
                         if (aBoolean) {
-                            FragmentUtils.changeFragment(MainActivity.this, R.id.contentFrame, mapFragment, false);
                             viewModel.getLocation();
                         } else {
                             viewModel.setState(State.STATE_ERROR_PERMISSIONS);
@@ -135,9 +135,15 @@ public class MainActivity extends BaseActivity implements MainActivityViewModel.
 
     @Override
     public void onDataRefreshed(List<Results> results) {
-        BaseFragment fragment = (BaseFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (fragment != null) {
-            fragment.setData(results);
+        if (currentTab != 0) {
+            if (currentTab == R.id.actionList) {
+                listFragment.setData(results);
+            } else {
+                mapFragment.setData(results);
+            }
+        } else {
+            mapFragment.setData(results);
+            FragmentUtils.changeFragment(this, R.id.contentFrame, mapFragment, false);
         }
     }
 }

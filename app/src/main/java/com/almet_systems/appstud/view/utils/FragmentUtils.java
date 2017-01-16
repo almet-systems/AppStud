@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by razir on 1/16/2017.
@@ -25,10 +26,12 @@ public class FragmentUtils {
         ft.commitAllowingStateLoss();
     }
 
-    public static void popBackStack(FragmentActivity activity){
-        FragmentManager fm=activity.getSupportFragmentManager();
-        for(int i=0;i<fm.getBackStackEntryCount();++i){
-            fm.popBackStack();
-        }
+    public static Fragment getCurrentFragment(AppCompatActivity activity) {
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        int stackCount = fragmentManager.getBackStackEntryCount();
+        if( fragmentManager.getFragments() != null ) return fragmentManager.getFragments().get( stackCount > 0 ? stackCount-1 : stackCount );
+        else return null;
     }
+
+
 }

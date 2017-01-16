@@ -11,11 +11,11 @@ import java.util.List;
  * Created by razir on 1/16/2017.
  */
 
-public class FragmentMapViewModel extends BaseViewModel {
+public class CacheViewModel extends BaseViewModel {
 
     private List<Results> data;
 
-    public FragmentMapViewModel(Context context) {
+    public CacheViewModel(Context context) {
         super(context);
     }
 

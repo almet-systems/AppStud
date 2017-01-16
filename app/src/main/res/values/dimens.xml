@@ -3,4 +3,6 @@
     <dimen name="side_padding">15dp</dimen>
     <dimen name="button_error_margin">15dp</dimen>
     <dimen name="progress_margin">15dp</dimen>
+    <dimen name="list_place_height">170dp</dimen>
+    <dimen name="item_place_title_padding">8dp</dimen>
 </resources>
